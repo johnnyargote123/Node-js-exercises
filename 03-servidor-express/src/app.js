@@ -3,7 +3,7 @@ import  ProductManager from "./producManager.js";
 const app = express()
 const manager = new ProductManager()
 
-const env = async() => {
+
 
     let consulta = await manager.getProduct()
 
@@ -34,6 +34,3 @@ const env = async() => {
     app.listen(8082, () => {
         console.log("Servidor arriba en el puerto 8082")
     })
-}
-
-env()
