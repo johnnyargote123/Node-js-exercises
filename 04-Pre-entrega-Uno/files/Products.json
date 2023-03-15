@@ -1,0 +1,35 @@
+[
+	{
+		"id": 1,
+		"title": "xbox",
+		"description": "este es un ipad",
+		"code": "s6dgf",
+		"price": 43566,
+		"thumbnails": "holi",
+		"status": true,
+		"stock": 1,
+		"category": "tecnologia"
+	},
+	{
+		"id": 2,
+		"title": "transformers",
+		"description": "este es un ipad",
+		"code": "s6dgf",
+		"price": 43566,
+		"thumbnails": "holi",
+		"status": true,
+		"stock": 1,
+		"category": "tecnologia"
+	},
+	{
+		"id": 4,
+		"title": "trompo",
+		"description": "este es un ipad",
+		"price": 43566,
+		"thumbnails": "holi",
+		"code": "AEIOU",
+		"stock": 1,
+		"category": "tecnologia",
+		"status": true
+	}
+]
