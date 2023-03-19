@@ -68,14 +68,9 @@ router.post("/:cid/product/:pid", async(req,res) => {
 
   if(ValidationCart !== -1 || ValidationRpoduct !== -1 ){
 
-    if(quantity){
+
       let agregarProductoCarrito = await manager.AddProductToCard(cartId,productId,quantity)
       return res.status(200).send({ status: "OK", payload: agregarProductoCarrito });
-    }
-    else{
-      return res.status(400).send({status: "Error", error: "incomplete values for add product to cart 'query:quantity' "})
-    }
-
 
 
   }

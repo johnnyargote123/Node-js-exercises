@@ -68,6 +68,13 @@ export default class CartManager  {
         const consultaProducto = await manager.getProduct()
         const cart = consultaCart.find((v) => v.id === codeCartId)
     
+        if(Number.isNaN(quantityProducto)){
+          quantityProducto = 1
+        }
+        else{
+          quantityProducto
+        }
+
 
         const index = consultaCart.findIndex((v) => v.id === codeCartId)  
         
