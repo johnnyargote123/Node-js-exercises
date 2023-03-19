@@ -2,34 +2,47 @@
 	{
 		"id": 1,
 		"title": "xbox",
-		"description": "este es un ipad",
-		"code": "s6dgf",
-		"price": 43566,
+		"description": "Con tu consola Xbox Series tendrás entretenimiento asegurado todos los días. Su tecnología fue creada para poner nuevos retos tanto a jugadores principiantes como expertos.",
+		"code": "AAA1",
+		"price": 1500000,
 		"thumbnails": "holi",
 		"status": true,
-		"stock": 1,
+		"stock": 20,
 		"category": "tecnologia"
 	},
 	{
 		"id": 2,
-		"title": "transformers",
-		"description": "este es un ipad",
-		"code": "s6dgf",
-		"price": 43566,
+		"title": "Robot Gundam wing figura de acción",
+		"description": "El traje móvil titular pilotado por el protagonista Heero Yuy de la popular serie Gundam Wing se une a las filas de la serie de figuras de acción avanzadas Robot Spirits. Este ambicioso lanzamiento de Robot Spirits contará con un truco de transformación en el modo Bird de Wing Gundam a través de la simple eliminación de partes de manos intercambiables.",
+		"code": "AAA2",
+		"price": 100000,
 		"thumbnails": "holi",
 		"status": true,
 		"stock": 1,
+		"category": "Figura de colección"
+	},
+	{
+		"id": 3,
+		"title": "Meta Quest 2",
+		"description": "Oculus Quest 2 — Gafas de Realidad Virtual Todo en Uno — 128 GB",
+		"code": "AAA3",
+		"price": 2500000,
+		"thumbnails": "holi",
+		"status": true,
+		"stock": 10,
 		"category": "tecnologia"
 	},
 	{
 		"id": 4,
-		"title": "trompo",
-		"description": "este es un ipad",
-		"price": 43566,
-		"thumbnails": "holi",
-		"code": "AEIOU",
-		"stock": 1,
-		"category": "tecnologia",
-		"status": true
+		"title": "Apple Studio Display 27' Pulgadas",
+		"description": "Presentamos el monitor Studio Display de Apple. Una envolvente pantalla Retina 5K de 27 pulgadas con cámara de 12 MP con Encuadre Centrado, micrófonos con calidad de estudio y un sistema de sonido de seis parlantes. El compañero ideal de cualquier Mac.",
+		"code": "AAA4",
+		"price": 8389000,
+		"thumbnails": [
+			"http://localhost:8080/images1679236990764-194253030454-001-750Wx750H.jfif"
+		],
+		"status": true,
+		"stock": 5,
+		"category": "tecnologia"
 	}
 ]

@@ -52,25 +52,68 @@ router.get("/:id", async(req, res) => {
 })
   
 
-router.post("/",async (req,res) => {
-try{
-  let product = req.body
+router.post("/", uploader.array("thumbnails", 5), async (req, res) => {
+  try {
+    let product = req.body;
+    const files = req.files;
 
-  if(!product.title || !product.description  || !product.code || !product.price || !product.status || !product.stock || !product.category  ){
-    return res.status(400).send({status: "Error", error: "incomplete values"})
+    if (
+      !product.title ||
+      !product.description ||
+      !product.code ||
+      !product.price ||
+      !product.status ||
+      !product.stock ||
+      !product.category
+    ) {
+      return res
+        .status(400)
+        .send({
+          status: "Error",
+          error: "incomplete values or file not uploaded",
+        });
+    }
+
+    product.thumbnails = [];
+
+    if (files) {
+      files.forEach((file) => {
+        const imageUrl = `http://localhost:8080/images${file.filename}`;
+        product.thumbnails.push(imageUrl);
+      });
+    }
+
+    let consulta = await manager.getProduct();
+    if (consulta.find((v) => v.code === product.code)) {
+      return res
+        .status(400)
+        .send({ status: "Error", error: "value of object repeat" });
+    }
+
+    let crearProducto = await manager.addProduct(
+      product.title,
+      product.description,
+      product.code,
+      Number(product.price),
+      product.thumbnails,
+      Boolean(product.status),
+      Number(product.stock),
+      product.category
+    );
+
+    return res
+      .status(201)
+      .send({
+        status: "Success",
+        meessage: `Product created ${crearProducto}`,
+      });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(400)
+      .send({ status: "Error", error: "Error creating product" });
   }
-  let consulta = await manager.getProduct()
-  if( consulta.find((v) => v.code === product.code) ){
-    return res.status(400).send({status: "Error", error: "value of object repeat"})
-  }
-    let crearProducto = await manager.addProduct(product.title, product.description, product.price, product.category, product.thumbnails, product.code, product.stock, product.status)
-    return res.status(201).send({status: "Success", meessage: `User created ${crearProducto}`})
-}catch (error) {
-  return res.status(400).send({status: "Error", error: "incomplete values"})
-}
-
-
-})
+});
 
 
 router.put("/:id", async(req, res) => {
