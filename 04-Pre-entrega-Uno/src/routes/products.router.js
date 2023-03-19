@@ -70,7 +70,7 @@ router.post("/", uploader.array("thumbnails", 5), async (req, res) => {
         .status(400)
         .send({
           status: "Error",
-          error: "incomplete values or file not uploaded",
+          error: "incomplete values",
         });
     }
 
