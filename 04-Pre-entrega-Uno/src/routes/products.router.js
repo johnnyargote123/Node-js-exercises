@@ -44,9 +44,15 @@ router.get("/:id", async(req, res) => {
 
   try {
     let consulta = await manager.getProductById(Number(req.params.id))
-    res.send(consulta)
+    if(consulta){
+      res.send(consulta)
+    }
+    else{
+      return res.status(404).send({status: "Error", message: `Not found this product ID :${req.params.id}`})
+    }
+
   } catch (error) {
-    return res.status(404).send({status: "Error", message: `Not found this product:${req.params.id}`})
+    return res.status(404).send({status: "Error", message: `Not found this product ID :${req.params.id}`})
   }
 
 })
@@ -151,12 +157,12 @@ router.delete("/:id", async(req,res) => {
   const userIndex = consulta.findIndex((u) => u.id === userId)
 
   if(userIndex === -1){
-    return res.status(404).status({status: "Error", message: "Product does not exist"})
+    return res.status(404).send({status: "Error", message: "Product does not exist"})
   }
 
   let eliminarProducto = await manager.deleteProductId(userId) 
 
-  return res.status(200).status({ status: "Succes", message: "Product succesfully deleted"} )
+  return res.status(200).send({ status: "Succes", message: "Product succesfully deleted"} )
 })
 
 

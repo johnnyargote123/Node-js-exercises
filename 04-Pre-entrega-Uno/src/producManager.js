@@ -73,7 +73,7 @@ export default class ProductManager  {
               return filterResult
             }        
             else{
-              return  console.error(`Producto ${codeId} no encontrado`)
+              throw new Error(`Producto ${codeId} no encontrado`);
             }
 
            
@@ -92,14 +92,14 @@ export default class ProductManager  {
         }
         else{
                  // valores que se desean cambiar
-        result[index].title = title
-        result[index].description = description
-        result[index].code = code
-        result[index].price = price
-        result[index].thumbnails = thumbnail
-        result[index].status = status
-        result[index].stock = stock
-        result[index].category = category
+          result[index].title = title === undefined ? result[index].title : title
+          result[index].description = description === undefined ? result[index].description : description
+          result[index].code = code === undefined ? result[index].code : code
+          result[index].price = price === undefined ? result[index].price : price
+          result[index].thumbnails = thumbnail === undefined ? result[index].thumbnails : thumbnail
+          result[index].status = status === undefined ? result[index].status : status
+          result[index].stock = stock === undefined ? result[index].stock : stock
+          result[index].category = category === undefined ? result[index].category : category
 
 
         // modelo del producto a actualizar

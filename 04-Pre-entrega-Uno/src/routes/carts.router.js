@@ -57,8 +57,7 @@ router.post("/:cid/product/:pid", async(req,res) => {
   try{
   const cartId = Number(req.params.cid)
   const productId = Number(req.params.pid)
-  const quantity = Number(req.query.quantity)
-
+  const quantity = Number(req.body.quantity)
 
   let consultaCart = await manager.getCarts()
   let consultaProduct = await  productManager.getProduct()
@@ -71,6 +70,8 @@ router.post("/:cid/product/:pid", async(req,res) => {
 
       let agregarProductoCarrito = await manager.AddProductToCard(cartId,productId,quantity)
       return res.status(200).send({ status: "OK", payload: agregarProductoCarrito });
+    
+
 
 
   }
@@ -84,9 +85,6 @@ router.post("/:cid/product/:pid", async(req,res) => {
 
 
 }catch (error) {
-
-    //return res.status(400).send({status: "Error", error: `Not found ${req.params.cid} or ${req.params.pid} `})
- 
   return res.status(400).send({status: "Error", error: `Can not add product to card ${req.params.cid}`})
 }
 
