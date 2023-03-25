@@ -31,7 +31,7 @@
 		"description": "Oculus Quest 2 — Gafas de Realidad Virtual Todo en Uno — 128 GB",
 		"code": "AAA3",
 		"price": 2500000,
-		"thumbnails":  [
+		"thumbnails": [
 			"http://localhost:8080/images/oculus-quest-2-comparison-card.jpg"
 		],
 		"status": false,
@@ -45,7 +45,7 @@
 		"code": "AAA4",
 		"price": 8389000,
 		"thumbnails": [
-			"http://localhost:8080/images/194253030454-001-750Wx750H.jpg"
+			"http://localhost:8080/images/1679780433628-194253030454-001-750Wx750H.jfif"
 		],
 		"status": true,
 		"stock": 5,

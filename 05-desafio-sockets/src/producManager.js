@@ -1,5 +1,5 @@
 import fs from "fs"
-
+import socket from "./socket.js";
 export default class ProductManager  {
 
     constructor(){
@@ -12,7 +12,9 @@ export default class ProductManager  {
         if(fs.existsSync(this.path || !this.products)){
             const data = await fs.promises.readFile(this.path, "utf-8")
             const result = JSON.parse(data)
+            socket.io.emit("product", result)
             return result
+            
         }
         else{
             return this.products
@@ -51,6 +53,7 @@ export default class ProductManager  {
             productos.push(product);
             await fs.promises.writeFile(this.path, JSON.stringify(productos, null, "\t"))
 
+            socket.io.emit("add-product", product)
         }
         if (findCode) {
           console.log("------------------------------------->")
@@ -143,6 +146,7 @@ export default class ProductManager  {
           else{
             result.splice(result.indexOf(ProducToDelete), 1)
             await fs.promises.writeFile(this.path, JSON.stringify(result, null, "\t"))
+            socket.io.emit("remove-product", ProducToDelete.id)
             return ProducToDelete
           }
     }
