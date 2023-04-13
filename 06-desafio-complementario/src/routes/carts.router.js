@@ -1,14 +1,18 @@
 import { Router } from "express";
-import CartManager from "../cartManager.js";
-import ProductManager from "../producManager.js";
+import CartManager from "../dao/fileManager/cartManager.js";
+import ProductManager from "../dao/fileManager/producManager.js";
+import ProductManagerDB from "../dao/dbManager/productManager.js";
+import CartManagerDB from "../dao/dbManager/cartManager.js";
 const router = Router();
+//file system
 const manager = new CartManager();
 const productManager = new ProductManager();
-// en construccion !
-
+//database
+const managerCartDB = new CartManagerDB();
+const productManagerDB = new ProductManagerDB();
 router.get("/", async (req, res) => {
   try {
-    let consulta = await manager.getCarts();
+    let consulta = await managerCartDB.getCarts();
 
 
     // mensaje de error status 404 si no encuentra ningun usuario en arreglo [users]
@@ -25,26 +29,24 @@ router.get("/", async (req, res) => {
   }
 });
 
-
 router.get("/:id", async(req, res) => {
-
-  try{
-    let consulta = await manager.getCartById(Number(req.params.id))
-
-
-    if(consulta.findIndex((v) => v.id === -1)){
+  try {
+    const consulta = await managerCartDB.getCartById(req.params.id);
+    if (consulta && consulta.id !== -1) {
       return res.status(200).send({ status: "OK", payload: consulta });
     }
-
+    return res.status(404).send({status: "Error", message: `Not found this cart: ${req.params.id}`})
   } catch (error) {
-    return res.status(404).send({status: "Error", message: `Not found this card: ${req.params.id}`})
+    return res.status(404).send({status: "Error", message: `Not found this cart: ${req.params.id}`})
   }
 })
 
 
+
+
 router.post("/", async(req,res) => {
   try{
-    let consulta = await manager.createCarts()
+    let consulta = await managerCartDB.createCarts()
     return res.status(200).send({ status: "OK", payload: consulta });
   }catch (error) {
   return res.status(400).send({status: "Error", error: "Can not create Cart"})
@@ -53,41 +55,24 @@ router.post("/", async(req,res) => {
 
 
 router.post("/:cid/product/:pid", async(req,res) => {
+  try {
+    const cartId = req.params.cid;
+    const productId = req.params.pid;
+    const quantity = Number(req.body.quantity);
 
-  try{
-  const cartId = Number(req.params.cid)
-  const productId = Number(req.params.pid)
-  const quantity = Number(req.body.quantity)
+    const consultaCart = await managerCartDB.getCartById(cartId);
+    const consultaProduct = await productManagerDB.getProductById(productId);
 
-  let consultaCart = await manager.getCarts()
-  let consultaProduct = await  productManager.getProduct()
+    if (!consultaCart || !consultaProduct) {
+      return res.status(400).send({ status: "Error", error: `Not found cart: ${cartId} or product: ${productId}` });
+    }
 
-  const ValidationCart =  consultaCart.findIndex((v) => v.id === cartId)
-  const ValidationRpoduct =  consultaProduct.findIndex((v) => v.id === productId)
-
-  if(ValidationCart !== -1 || ValidationRpoduct !== -1 ){
-
-
-      let agregarProductoCarrito = await manager.AddProductToCard(cartId,productId,quantity)
-      return res.status(200).send({ status: "OK", payload: agregarProductoCarrito });
-    
-
-
-
+    const agregarProductoCarrito = await managerCartDB.addProductToCart(cartId, productId, quantity);
+    return res.status(200).send({ status: "OK", payload: agregarProductoCarrito });
+  } catch (error) {
+    console.error(error);
+    return res.status(400).send({ status: "Error", error: `Can not add product to card ${req.params.cid}` });
   }
-  else{
-    return res.status(400).send({status: "Error", error: `Not found  cart: ${req.params.cid} or  product: ${req.params.pid} `})
-  }
-
-
-
-
-
-
-}catch (error) {
-  return res.status(400).send({status: "Error", error: `Can not add product to card ${req.params.cid}`})
-}
-
-})
+});
 
 export default router;

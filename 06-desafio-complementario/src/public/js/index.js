@@ -49,9 +49,3 @@ socket.on('add-product', (newProduct) => {
   });
 
 
-  /* socket.on("product_added", (productsData) => {
-    const productContainer = document.getElementById("product-container");
-    const productTemplate = Handlebars.compile($("#product-template").html());
-    const productHtml = productTemplate({ products: productsData });
-    productContainer.innerHTML = productHtml;
-  }); */

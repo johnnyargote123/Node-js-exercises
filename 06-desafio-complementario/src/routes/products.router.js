@@ -1,17 +1,21 @@
 import { Router } from "express";
-import ProductManager from "../producManager.js";
+import ProductManager from "../dao/fileManager/producManager.js";
+import ProductManagerDB from "../dao/dbManager/productManager.js";
 import { uploader } from "../utils.js";
+
 const router = Router();
 const manager = new ProductManager();
+const managerDB = new ProductManagerDB();
 
 router.get("/", async (req, res) => {
   try {
-    let consulta = await manager.getProduct();
-
+    let consulta = await managerDB.getProduct();
+    //let consultaDB = await managerDB.getProduct();
     const limit = req.query.limit;
 
     if (!limit) {
       res.send(consulta);
+      //res.send(consultaDB);
     } else {
       if (consulta.find((v) => v.id == parseInt(req.query.limit))) {
         const limitNum = parseInt(limit);
@@ -33,7 +37,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async(req, res) => {
 
   try {
-    let consulta = await manager.getProductById(Number(req.params.id))
+    let consulta = await managerDB.getProductById(req.params.id)
     if(consulta){
       res.send(consulta)
     }
@@ -78,19 +82,21 @@ router.post("/", uploader.array("thumbnails", 5), async (req, res) => {
       });
     }
 
-    let consulta = await manager.getProduct();
+    let consulta = await managerDB.getProduct();
     if (consulta.find((v) => v.code === product.code)) {
       return res
         .status(400)
         .send({ status: "Error", error: "value of object repeat" });
     }
 
-    let crearProducto = await manager.addProduct(
+    
+
+    let crearProducto = await managerDB.addProduct(
       product.title,
       product.description,
       product.code,
       Number(product.price),
-      product.thumbnails,
+      JSON.stringify(product.thumbnails),
       Boolean(product.status),
       Number(product.stock),
       product.category
@@ -112,7 +118,7 @@ router.post("/", uploader.array("thumbnails", 5), async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    let consulta = await manager.getProduct();
+    let consulta = await managerDB.getProduct();
     const userId = req.params.id;
     let product = req.body;
 
@@ -130,7 +136,7 @@ router.put("/:id", async (req, res) => {
         .send({ status: "Error", message: "Cannot update product id" });
     }
 
-    let crearProducto = await manager.UpdateProducId(
+    let crearProducto = await managerDB.UpdateProducId(
       Number(userId),
       product.title,
       product.description,
@@ -152,7 +158,7 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  let consulta = await manager.getProduct();
+  let consulta = await managerDB.getProduct();
   const userId = Number(req.params.id);
 
   const userIndex = consulta.findIndex((u) => u.id === userId);
@@ -163,7 +169,7 @@ router.delete("/:id", async (req, res) => {
       .status({ status: "Error", message: "Product does not exist" });
   }
 
-  let eliminarProducto = await manager.deleteProductId(userId);
+  let eliminarProducto = await managerDB.deleteProductId(userId);
 
   return res
     .status(200)
