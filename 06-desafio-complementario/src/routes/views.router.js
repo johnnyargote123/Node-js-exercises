@@ -1,9 +1,11 @@
 
 import ProductManager from "../dao/fileManager/producManager.js";
 import ProductManagerDB from "../dao/dbManager/productManager.js";
+import MessageManagerDB from "../dao/dbManager/messageManager.js";
 import { Router } from "express";
 
 const managerDB = new ProductManagerDB();
+const messageManagerDB = new MessageManagerDB();
 const manager = new ProductManager();
 const router = Router();
 
@@ -48,5 +50,9 @@ router.get("/realtimeproducts", async (req, res) => {
     res.render("realTimeProducts", { products$: productsWithOwnProperties, style: "index.css" });
   });
 
+  router.get("/chat", async (req, res) => {
+    const messages = await messageManagerDB.getMessages();
+    return res.render("messages");
+  });
 
   export default router;

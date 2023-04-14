@@ -122,8 +122,7 @@ router.put("/:id", async (req, res) => {
     const userId = req.params.id;
     let product = req.body;
 
-    const userIndex = consulta.findIndex((u) => u.id == Number(userId));
-
+    const userIndex = consulta.findIndex((u) => u._id == userId);
     if (userIndex === -1) {
       return res
         .status(404)
@@ -135,9 +134,8 @@ router.put("/:id", async (req, res) => {
         .status(400)
         .send({ status: "Error", message: "Cannot update product id" });
     }
-
-    let crearProducto = await managerDB.UpdateProducId(
-      Number(userId),
+    let crearProducto = await managerDB.updateProductById(
+      userId,
       product.title,
       product.description,
       product.code,
@@ -158,22 +156,26 @@ router.put("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
+  try {
   let consulta = await managerDB.getProduct();
-  const userId = Number(req.params.id);
+  const userId = req.params.id;
 
-  const userIndex = consulta.findIndex((u) => u.id === userId);
-
-  if (userIndex === -1) {
-    return res
-      .status(404)
-      .status({ status: "Error", message: "Product does not exist" });
+  const userIndex = consulta.findIndex((u) => u._id == userId);
+  console.log(userIndex)
+  if (userIndex == -1) {
+    return res.status(404).send({ status: "Error", message: "Product does not exist" });
   }
+  else{
 
-  let eliminarProducto = await managerDB.deleteProductId(userId);
+    let eliminarProducto = await managerDB.deleteProductId(userId);
 
-  return res
-    .status(200)
-    .status({ status: "Succes", message: "Product succesfully deleted" });
+    return res
+      .status(200)
+      .send({ status: "Succes", message: "Product succesfully deleted" });
+  }
+} catch (error) {
+  return res.status(404).send({ status: "Error", message: "Product does not exist" });
+}
 });
 
 

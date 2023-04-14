@@ -66,21 +66,24 @@ export default class ProducManager {
 
    updateProductById = async (codeId, title, description, code, price, thumbnail, status, stock, category) => {
     try {
-      const product = await productModel.findOne({ code: codeId });
+      const objectId = new mongoose.Types.ObjectId(codeId);
+      const product = await productModel.findOne(objectId);
       if (!product) {
         throw new Error(`El producto con id ${codeId} no se encontró`);
       }
-  
+ 
+
+
       // valores que se desean cambiar
-      product.title = title || product.title;
-      product.description = description || product.description;
-      product.code = code || product.code;
-      product.price = price || product.price;
-      product.thumbnail = thumbnail || product.thumbnail;
-      product.status = status || product.status;
-      product.stock = stock || product.stock;
-      product.category = category || product.category;
-  
+      product.title = title === undefined ? product.title: title;
+      product.description = description === undefined ? product.description : description;
+      product.code = code === undefined ?  product.code : code;
+      product.price = price === undefined ?  product.price: code;
+      product.thumbnail = thumbnail === undefined ? product.thumbnail: thumbnail ;
+      product.status = status === undefined ?  product.status: status;
+      product.stock = stock === undefined ? product.stock: stock;
+      product.category = category === undefined ? product.category: category;
+
       // actualiza el producto
       const updatedProduct = await product.save();
       return updatedProduct;
@@ -91,10 +94,16 @@ export default class ProducManager {
 
 
   deleteProductId = async (codeId) => {
-    const deletedProduct = await productModel.findOneAndDelete({ code: codeId });
+
+    const objectId = new mongoose.Types.ObjectId(codeId);
+    const deletedProduct = await productModel.findById(objectId);
     
     if (!deletedProduct) {
       throw new Error(`El producto ${codeId} no existe, no se puede borrar.`);
+    }
+    else{
+       await productModel.findOneAndDelete(objectId);
+       socket.io.emit("remove-product", objectId)
     }
     
     return deletedProduct;
