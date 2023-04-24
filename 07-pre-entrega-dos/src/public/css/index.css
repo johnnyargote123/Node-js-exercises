@@ -111,3 +111,34 @@ border: 1px solid #777;
 padding: 15px;
 text-align: center;
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    width: 100%;
+    background-color: #ededed;
+  }
+  
+  .pagination-button {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 20px;
+    font-size: 20px;
+  }
+  
+  .pagination-button.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+  }
+
+  .number-page{
+    font-size: 20px;
+    margin: 0px 10px;
+  }

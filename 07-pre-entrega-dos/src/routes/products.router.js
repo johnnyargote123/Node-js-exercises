@@ -9,28 +9,45 @@ const managerDB = new ProductManagerDB();
 
 router.get("/", async (req, res) => {
   try {
-    let consulta = await managerDB.getProduct();
-    //let consultaDB = await managerDB.getProduct();
-    const limit = req.query.limit;
+    const limit = req.query.limit || 10;
+    const page = req.query.page || 1
+    const category = req.query.category 
+    const status = req.query.status 
+    const sort = req.query.sort
 
-    if (!limit) {
-      res.send(consulta);
-      //res.send(consultaDB);
-    } else {
-      if (consulta.find((v) => v.id == parseInt(req.query.limit))) {
-        const limitNum = parseInt(limit);
-        const limitDataCosulta = consulta.slice(0, limitNum);
-        res.send(limitDataCosulta);
-      } else {
-        return res
-          .status(404)
-          .send({ status: "Error", message: "Product not found" });
-      }
+    if (isNaN(limit)) {
+      return res
+        .status(400)
+        .send({ status: "Error", message: "Invalid value for limit" });
     }
+
+      const products = await managerDB.getProductPage(page, limit, category, status, sort);
+      const payload = {
+        totalPages: products.totalPages,
+        totalDocs: products.totalDocs,
+        prevPage: products.prevPage,
+        nextPage: products.nextPage,
+        page: products.page,
+        hasPrevPage:products.hasPrevPage,
+        hasNextPage:products.hasNextPage
+      }
+      
+
+
+      if (products.hasPrevPage) {
+        payload.prevLink = `/products?page=${products.prevPage}`;
+      }
+  
+      if (products.hasNextPage) {
+        payload.nextLink = `/products?page=${products.nextPage}`;
+      }
+
+      return res.status(200).send({ status: "success", payload: { ...products, ...payload } });
+    
   } catch (error) {
     return res
       .status(404)
-      .send({ status: "Error", message: "There are not products registered" });
+      .send({ status: "Error", message: "There are no products registered" });
   }
 });
 
@@ -39,7 +56,7 @@ router.get("/:id", async(req, res) => {
   try {
     let consulta = await managerDB.getProductById(req.params.id)
     if(consulta){
-      res.send(consulta)
+      res.status(200).send({status: "success", payload: consulta})
     }
     else{
       return res.status(404).send({status: "Error", message: `Not found this product ID :${req.params.id}`})

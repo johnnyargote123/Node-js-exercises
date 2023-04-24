@@ -1,5 +1,5 @@
 <div class="container-general">
-  <h1>Producto (socket)</h1>
+  <h1>Producto</h1>
   <section>
     <div id="products-list" class="contianer-section-products-list">
     {{#each products$}}
@@ -27,10 +27,24 @@
           <p> <b>Description:</b> {{this.description}}</p>
           <p> <b>Code:</b> {{this.code}}</p>
           <p> <b>Price:</b> ${{this.price}}</p>
+          <button class="open-product-page" onclick="goToProduct('{{this.id}}')">Abrir Producto</button>
+          <button class="add-to-cart-button">Agregar al carrito</button>
         </div>
       </div>
     {{/each}}
     </div>
   </section>
-
+  {{#if totalPages}}
+  <div class="pagination">
+    {{#if prevPage}}
+      <button class="pagination-button" onclick="goToPage({{prevPage}})">&laquo;</button>
+    {{/if}}
+  <a class="number-page">{{currentPage}}</a>
+    {{#if nextPage}}
+      <button class="pagination-button" onclick="goToPage({{nextPage}})">&raquo;</button>
+    {{/if}}
+  </div>
+  {{/if}}
 </div>
+
+<script src="/js/home.js"></script>

@@ -75,4 +75,74 @@ router.post("/:cid/product/:pid", async(req,res) => {
   }
 });
 
+
+router.delete('/:cid/products/:pid', async (req, res) => {
+  const { cid, pid } = req.params;
+
+  const result = await managerCartDB.removeProductFromCart(cid, pid);
+
+  if (!result) {
+    // Si result es null, significa que ocurrió un error en la función removeProductFromCart
+    return res.status(500).send({status: "Error", error: `An error occurred while removing the product ${pid} from the cart` });
+  }
+
+  if (result === true) {
+    // Si result es true, significa que el producto se eliminó correctamente del carrito
+    return res.status(200).send({ status: "OK", payload:result, message: `Product ${pid} removed from cart successfully` });
+  } else {
+    // Si result no es null ni true, significa que hubo un problema al eliminar el producto del carrito
+    return res.status(400).send({status: "Error", error: `Could not remove product ${pid} from cart` });
+  }
+});
+
+router.delete('/:cid', async (req, res) => {
+  const cartId = req.params.cid;
+  const result = await managerCartDB.deleteCartById(cartId);
+  
+  if (!result) {
+    res.status(404).send({status: "Error",error: `Cart not found ${cartId}`});
+  } else {
+    res.status(200).send({status: "OK", payload:result, message:`Removed all items from the cart ${cartId}`});
+  }
+});
+
+router.put('/:cid', async (req, res) => {
+  try {
+    const cartId = req.params.cid;
+    const products = req.body.products;
+  
+    const updatedCart = await managerCartDB.updateCart(cartId, products);
+  
+    if (!updatedCart) {
+      res.status(404).json({status: "Error", error: `Cart not found ${cartId}` });
+      return;
+    }
+    else{
+          res.status(200).send({status: "Ok",payload:updatedCart, message:`Cart ${cartId} was update` })
+    }
+  
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({status: "Error", error: 'There was an error updating the cart' });
+  }
+});
+
+router.put('/:cid/products/:pid', async (req, res) => {
+  const cartId = req.params.cid;
+  const productId = req.params.pid;
+  const quantity = req.body.quantity;
+
+  const updatedProduct = await managerCartDB.updateProductQuantity(cartId, productId, quantity);
+
+  if (!updatedProduct) {
+    return res.status(404).send({status: "Error",error:`Could not update product ${productId} from cart ${cartId}`});
+  }
+  else{
+      return res.status(200).send({status: "Ok",payload:updatedProduct, message:  `the product ${productId} was successfully updated`});
+  }
+
+
+});
+
 export default router;

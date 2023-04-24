@@ -13,6 +13,42 @@ export default class ProducManager {
     }
   };
 
+  getProductPage = async (page, limit, category, status, sort) => {
+    try {
+      let products
+
+      const query = {};
+      if (category) {
+        query.category = category;
+      }
+  
+      if (status) {
+        query.status = status;
+      }
+
+      const option = {}
+
+      if(sort){
+        const sortBy= "price"
+        option.limit = limit
+        option.page = page
+        option.sort =  { [sortBy]: sort }
+      }
+      else{
+        option.limit = limit
+        option.page = page
+      }
+
+      products = await productModel.paginate(query, option);
+         
+ 
+      
+  
+      return products;
+    } catch (error) {
+      console.error(error);
+    }
+  };
   addProduct = async (
     title,
     description,
@@ -63,6 +99,20 @@ export default class ProducManager {
       console.error(error);
     }
   };
+
+  getProductsByCategoryAndStatus = async (category, status) => {
+    try {
+      const products = await productModel.find({ category: category });
+  
+      if (products.length > 0) {
+        return products;
+      } else {
+        throw new Error(`No se encontraron productos para la categoría "${category}" y disponibilidad "${status}"`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
    updateProductById = async (codeId, title, description, code, price, thumbnail, status, stock, category) => {
     try {
