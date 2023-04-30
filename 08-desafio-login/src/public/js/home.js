@@ -52,3 +52,12 @@ function goToProduct (productId) {
   console.log(productId)
     window.location.href = `/${productId}`;
 }
+
+
+function logout() {
+  fetch('/api/sessions/logout', { method: 'POST' })
+    .then(() => {
+      window.location.href = '/login';
+    })
+    .catch((error) => console.log(error));
+}

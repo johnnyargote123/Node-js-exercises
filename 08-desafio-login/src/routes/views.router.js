@@ -3,6 +3,7 @@ import ProductManager from "../dao/fileManager/producManager.js";
 import ProductManagerDB from "../dao/dbManager/productManager.js";
 import CartManagerDB from "../dao/dbManager/cartManager.js";
 import MessageManagerDB from "../dao/dbManager/messageManager.js";
+import { checkLogged, checkLogin } from "../middlewares/auth.js";
 import { Router } from "express";
 const managerDB = new ProductManagerDB();
 const messageManagerDB = new MessageManagerDB();
@@ -10,6 +11,14 @@ const cartManagerDB = new CartManagerDB()
 const manager = new ProductManager();
 const router = Router();
 
+
+router.get("/register", checkLogged,(req,res) => {
+  res.render("register")
+})
+
+router.get("/login" ,checkLogged,(req,res) => {
+  res.render("login")
+})
 
 router.get("/cart-personal", async (req, res) => {
   const carts = await cartManagerDB.getCarts()
@@ -33,7 +42,7 @@ router.get("/cart-personal", async (req, res) => {
 
 })
 
-router.get("/", async (req, res) => {
+router.get("/", checkLogin, async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const category = req.query.category || null;
@@ -63,6 +72,7 @@ router.get("/", async (req, res) => {
     hasPrevPage: products.hasPrevPage,
     nextPage: page + 1,
     prevPage: page - 1,
+    user: req.session.user,
     style: "index.css"
   });
 });

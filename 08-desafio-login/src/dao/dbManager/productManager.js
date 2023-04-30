@@ -128,7 +128,7 @@ export default class ProducManager {
       product.title = title === undefined ? product.title: title;
       product.description = description === undefined ? product.description : description;
       product.code = code === undefined ?  product.code : code;
-      product.price = price === undefined ?  product.price: code;
+      product.price = price === undefined ?  product.price: price;
       product.thumbnail = thumbnail === undefined ? product.thumbnail: thumbnail ;
       product.status = status === undefined ?  product.status: status;
       product.stock = stock === undefined ? product.stock: stock;

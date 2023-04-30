@@ -5,36 +5,54 @@ import viewRouter from "./routes/views.router.js";
 import socket from "./socket.js";
 import handlebars from "express-handlebars";
 import __dirname from "./utils.js";
-import dotenv from "dotenv"
-import mongoose from "mongoose"
-
-dotenv.config()
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import morgan from "morgan";
+import sessionsRouter from "./routes/sessions.router.js";
+import config from "./config.js";
+import database from "./db.js";
 const app = express();
 
+
+
+app.use(express.json())
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(`${__dirname}/public`));
+app.use(morgan("dev"))
+app.use(
+  session({
+    store: MongoStore.create({
+        mongoUrl: config.dbUrl,
+        ttl: 60,
+
+    }),
+    resave: false,
+    saveUninitialized: false,
+    secret: "sadgfgh23",
+  })
+);
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "handlebars");
 
-
-app.use(express.json())
-const DB_USER = process.env.DB_USER
-const DB_PASSWORD = process.env.DB_PASSWORD
-const DB_NAME = process.env.DB_NAME
-const httpServer =  app.listen (8080, () => {
-  console.log("Listening on port 8080");
-});
-
-mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.qdsizsu.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`)
+// conexion con database
+database.connect();
 
 
+
+
+app.use("/api/sessions", sessionsRouter);
 app.use("/api/products/", productRouter);
 app.use("/api/carts/", cardRouter);
 app.use("/", viewRouter);
+
+
+const httpServer =  app.listen (8080, () => {
+  console.log("Listening on port 8080");
+});
 
 
 socket.connect(httpServer);

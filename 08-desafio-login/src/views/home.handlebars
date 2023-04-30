@@ -1,5 +1,17 @@
 <div class="container-general">
-  <h1>Producto</h1>
+  <div class="container-header">
+    <div></div>
+              <h1 style="margin-left: 90px;">Producto</h1>
+    <button onclick="logout()">Cerrar sesión</button>
+  </div>
+
+  <div class="container-personal-info">
+  <h2>Bienvenido a tu perfil ({{user.name}})</h2>
+  <p>{{user.name}}</p>
+  <p>{{user.email}}</p>
+  <p>{{user.age}}</p>
+  </div>
+
   <section>
     <div id="products-list" class="contianer-section-products-list">
     {{#each products$}}
