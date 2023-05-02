@@ -1,0 +1,17 @@
+  <h1>Cart </h1>
+  <ul>
+    {{#each productsId$}}
+      <li>
+        <h2>Cart ID: {{_id}}</h2>
+        <ul>
+          {{#each products}}
+            <li>
+              <p>Product ID: {{_id}}</p>
+              <p>Product: {{product}}</p>
+              <p>Quantity: {{quantity}}</p>
+            </li>
+          {{/each}}
+        </ul>
+      </li>
+    {{/each}}
+  </ul>
