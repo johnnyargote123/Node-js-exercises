@@ -100,6 +100,7 @@ export default class ProducManager {
     }
   };
 
+
   getProductsByCategoryAndStatus = async (category, status) => {
     try {
       const products = await productModel.find({ category: category });
@@ -117,7 +118,7 @@ export default class ProducManager {
    updateProductById = async (codeId, title, description, code, price, thumbnail, status, stock, category) => {
     try {
       const objectId = new mongoose.Types.ObjectId(codeId);
-      const product = await productModel.findOne(objectId);
+      const product = await productModel.findById(objectId);
       if (!product) {
         throw new Error(`El producto con id ${codeId} no se encontró`);
       }
@@ -152,7 +153,7 @@ export default class ProducManager {
       throw new Error(`El producto ${codeId} no existe, no se puede borrar.`);
     }
     else{
-       await productModel.findOneAndDelete(objectId);
+       await productModel.findByIdAndDelete(objectId);
        socket.io.emit("remove-product", objectId)
     }
     

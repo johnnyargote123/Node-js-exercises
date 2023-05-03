@@ -50,7 +50,7 @@ addToCartButtons.forEach((button) => {
 
 function goToProduct (productId) {
   console.log(productId)
-    window.location.href = `/${productId}`;
+    window.location.href = `/product/${productId}`;
 }
 
 

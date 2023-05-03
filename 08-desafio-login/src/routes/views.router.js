@@ -12,6 +12,11 @@ const manager = new ProductManager();
 const router = Router();
 
 
+router.get("/chat", async (req, res) => {
+  const messages = await messageManagerDB.getMessages();
+  return res.render("messages");
+});
+
 router.get("/register", checkLogged,(req,res) => {
   res.render("register")
 })
@@ -20,7 +25,7 @@ router.get("/login" ,checkLogged,(req,res) => {
   res.render("login")
 })
 
-router.get("/cart-personal", async (req, res) => {
+router.get("/cart-personal",checkLogin, async (req, res) => {
   const carts = await cartManagerDB.getCarts()
   const cartsWithOwnProperties = carts.map(cart => {
     return {
@@ -49,6 +54,8 @@ router.get("/", checkLogin, async (req, res) => {
   const status = req.query.status || null;
   const sort = req.query.sort || null;
 
+
+
   const products = await managerDB.getProductPage(page, limit, category, status, sort);
   const productsWithOwnProperties = products.docs.map(product => {
     return {
@@ -75,31 +82,14 @@ router.get("/", checkLogin, async (req, res) => {
     user: req.session.user,
     style: "index.css"
   });
+
+
 });
 
 
 
-router.get("/:pid", async (req, res) => {
-  const productId = req.params.pid;
-  const products = await managerDB.getProductById(productId);
-  console.log(products?.title); // Verificar si products se establece correctamente
 
-  const productsWithOwnProperties = {
-    id: products?.id,
-    status: products?.status,
-    title: products?.title,
-    stock: products?.stock,
-    category: products?.category,
-    description: products?.description,
-    code: products?.code,
-    price: products?.price
-  };
 
-  res.render("product", {
-    productsId$: productsWithOwnProperties,
-    style: "index.css"
-  });
-});
 
 
 
@@ -123,9 +113,29 @@ router.get("/realtimeproducts", async (req, res) => {
     res.render("realTimeProducts", { products$: productsWithOwnProperties, style: "index.css" });
   });
 
-  router.get("/chat", async (req, res) => {
-    const messages = await messageManagerDB.getMessages();
-    return res.render("messages");
-  });
 
+  router.get("/product/:id",checkLogin, async (req, res) => {
+    const productId = req.params.id;
+console.log(productId, 'holi')
+    if(productId){
+    const products = await managerDB.getProductById(productId);
+    console.log(products?.title); // Verificar si products se establece correctamente
+  
+    const productsWithOwnProperties = {
+      id: products?.id,
+      status: products?.status,
+      title: products?.title,
+      stock: products?.stock,
+      category: products?.category,
+      description: products?.description,
+      code: products?.code,
+      price: products?.price
+    };
+  
+    res.render("product", {
+      productsId$: productsWithOwnProperties,
+      style: "index.css"
+    });
+    }
+  });
   export default router;
