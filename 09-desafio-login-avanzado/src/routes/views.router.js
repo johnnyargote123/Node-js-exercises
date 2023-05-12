@@ -88,7 +88,9 @@ router.get("/", checkLogin, async (req, res) => {
 
 
 
-
+router.get("/", checkLogin, (req, res) => {
+  res.render("home", { user: req.session.user });
+});
 
 
 
@@ -116,7 +118,6 @@ router.get("/realtimeproducts", async (req, res) => {
 
   router.get("/product/:id",checkLogin, async (req, res) => {
     const productId = req.params.id;
-console.log(productId, 'holi')
     if(productId){
     const products = await managerDB.getProductById(productId);
     console.log(products?.title); // Verificar si products se establece correctamente

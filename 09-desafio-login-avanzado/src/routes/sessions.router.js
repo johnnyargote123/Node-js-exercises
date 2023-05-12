@@ -1,6 +1,8 @@
 import { Router } from "express";
 import userModel from "../models/user.model.js";
 import updateUserRoleMiddleware from "../middlewares/rol.js"
+import { createHash, isValidPassword } from "../utils.js";
+import passport from "passport";
 const router = Router();
 
 router.post("/login", updateUserRoleMiddleware, async (req, res) => {
@@ -73,5 +75,15 @@ router.post("/register", async (req, res) => {
     console.log(error);
   }
 });
+
+router.get("/github", passport.authenticate("github",{scope:["user:email"]}),(req,res) => {
+  
+})
+
+router.get("/githubcallback", passport.authenticate("github",{failureRedirect: "/login"}),(req,res) =>{
+  req.session.user = req.user
+  res.redirect("/")
+
+})
 
 export default router;

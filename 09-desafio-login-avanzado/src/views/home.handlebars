@@ -1,16 +1,25 @@
 <div class="container-general">
   <div class="container-header">
     <div></div>
-              <h1 style="margin-left: 90px;">Producto</h1>
+      <h1 style="margin-left: 90px;">Producto</h1>
     <button onclick="logout()">Cerrar sesión</button>
   </div>
-
+{{#if user.name}}
   <div class="container-personal-info">
-  <h2>Bienvenido a tu perfil ({{user.name}})</h2>
+  <h2>Bienvenido a tu perfil ({{ user.name}})</h2>
   <p>{{user.name}}</p>
   <p>{{user.email}}</p>
   <p>{{user.age}}</p>
   </div>
+{{/if}}
+{{#if user.first_name}}
+  <div class="container-personal-info">
+  <h2>Bienvenido a tu perfil ({{ user.first_name}})</h2>
+  <p>{{user.first_name}}</p>
+  <p>{{user.email}}</p>
+  <p>{{user.age}}</p>
+  </div>
+{{/if}}
 
   <section>
     <div id="products-list" class="contianer-section-products-list">
