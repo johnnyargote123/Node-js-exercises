@@ -22,6 +22,7 @@ export async function login(req, res) {
 
 
 
+
 export async function logout(req, res) {
   try {
     const logoutData = req.session;

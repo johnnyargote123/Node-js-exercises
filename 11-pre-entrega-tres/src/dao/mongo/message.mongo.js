@@ -1,6 +1,6 @@
-import messagesModel from "../models/message.model.js";
+import messagesModel from "../mongo/models/message.model.js";
 
-export default class MessageManager {
+export default class Message {
   constructor() {}
 
   createMessage = async function (message) {

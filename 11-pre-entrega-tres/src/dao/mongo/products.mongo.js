@@ -1,7 +1,7 @@
-import { productModel } from "../models/product.model.js";
+import { productModel } from "../mongo/models/product.model.js";
 import socket from "../../socket.js";
 import mongoose from 'mongoose';
-export default class ProducManager {
+ class Producs {
   constructor() {}
 
   getProduct = async () => {
@@ -159,4 +159,23 @@ export default class ProducManager {
     
     return deletedProduct;
   };
+
+  async updateStock(productId, newStock) {
+    try {
+      const updatedProduct = await productModel.findOneAndUpdate(
+        { _id: productId },
+        { $set: { stock: newStock } },
+        { new: true }
+      );
+        
+      if (!updatedProduct) {
+        throw new Error("Product not found");
+      }
+      return updatedProduct
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 }
+export  const productMongo = new Producs()

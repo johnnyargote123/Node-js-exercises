@@ -1,9 +1,9 @@
 import passport from "passport";
 import local from "passport-local";
-import userModel from "../dao/models/user.model.js";
+import userModel from "../dao/mongo/models/user.model.js";
 import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from "passport-github2";
-import config from "../config.js";
+import config from "../config/config.js";
 const { clientID, clientSecret, callbackUrl } = config;
 const LocalStrategy = local.Strategy;
 const initializePassport = () => {

@@ -1,4 +1,5 @@
 import { cartsRepository } from "../dao/repositories/cart.repository.js";
+import {productsRepository} from "../dao/repositories/products.repository.js"
 
 class CartService {
   async getAllCarts() {
@@ -42,7 +43,6 @@ class CartService {
     try {
       const cart = await cartsRepository.getCartById(cartId);
       const product = await productsRepository.getProductById(productId);
-
       if (!cart || !product) {
         throw new Error(`Cart (${cartId}) or product (${productId}) not found`);
       }
@@ -107,7 +107,6 @@ class CartService {
         productId,
         quantity
       );
-
       if (!updatedProduct) {
         throw new Error(`Could not update product (${productId}) from cart (${cartId})`);
       }
@@ -117,6 +116,9 @@ class CartService {
       throw new Error("An error occurred while updating the product quantity");
     }
   }
+
+
+  
 }
 
 export const cartService = new CartService();

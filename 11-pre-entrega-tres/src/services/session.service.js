@@ -1,5 +1,5 @@
 import { sessionRepository } from "../dao/repositories/session.repository.js";
-
+import UserDTO from "../dao/dtos/session.dto.js";
 class SessionService {
   async loginUser(email, password) {
     try {
@@ -10,7 +10,8 @@ class SessionService {
     }
   }
 
-  
+
+
   async  logoutUser(data) {
     try {
       await sessionRepository.logoutUser(data);

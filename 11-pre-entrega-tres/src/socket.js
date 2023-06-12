@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import MessageManager from "./dao/dbManager/messageManager.js";
+import MessageManager from "./dao/mongo/message.mongo.js";
 
 const socket = {};
 //let messages = [];

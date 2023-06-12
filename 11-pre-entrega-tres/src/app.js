@@ -9,12 +9,11 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import morgan from "morgan";
 import sessionsRouter from "./routes/sessions.router.js";
-import config from "./config.js";
+import config from "./config/config.js";
 import database from "./db.js";
 import passport from "passport";
 import initializePassport from "./auth/passport.js";
 const app = express();
-
 
 
 app.use(express.json())

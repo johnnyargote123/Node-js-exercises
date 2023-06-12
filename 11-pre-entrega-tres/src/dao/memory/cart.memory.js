@@ -1,29 +1,27 @@
 import fs from "fs"
-import ProductManager from "./producManager.js";
 
 
-const manager = new ProductManager()
+import { productsMemory } from "./product.memory.js";
+const manager = productsMemory
 
 
 
-export default class CartManager  {
+ class Carts  {
 
-    constructor(){
-        this.path = "../../../files/Cards.json"
-        this.Carts = []
-        this.productsObject = []
-    }
-
-    getCarts = async() => {
-        if(fs.existsSync(this.path || !this.Carts)){
-            const data = await fs.promises.readFile(this.path, "utf-8")
-            const result = JSON.parse(data)
-            return result
+    constructor() {
+        this.path = "./files/Carts.json";
+        this.Carts = [];
+      }
+    
+      getCarts = async () => {
+        if (fs.existsSync(this.path || !this.Carts)) {
+          const data = await fs.promises.readFile(this.path, "utf-8");
+          const result = JSON.parse(data);
+          return result;
+        } else {
+          return this.Carts;
         }
-        else{
-            return this.Carts
-        }
-    }
+      }
 
     createCarts = async() => {
         const consultaCart = await this.getCarts()
@@ -119,3 +117,4 @@ export default class CartManager  {
 
     
 }
+export  const cartsMemory = new Carts()

@@ -1,11 +1,11 @@
-import ProductManagerDB from "../../dao/dbManager/productManager.js";
-import CartManagerDB from "../../dao/dbManager/cartManager.js";
-import MessageManagerDB from "../../dao/dbManager/messageManager.js";
+
+import MessageManagerDB from "../../dao/mongo/message.mongo.js";
+import { productDAO, cartsDAO } from "../factory.js";
+
+
 
 class ViewsRepository {
   constructor() {
-    this.productManagerDB = new ProductManagerDB();
-    this.cartManagerDB = new CartManagerDB();
     this.messageManagerDB = new MessageManagerDB();
   }
 
@@ -14,11 +14,11 @@ class ViewsRepository {
   }
 
   async getCarts() {
-    return await this.cartManagerDB.getCarts();
+    return await cartsDAO.getCarts();
   }
 
   async getProductPage(page, limit, category, status, sort) {
-    return await this.productManagerDB.getProductPage(
+    return await productDAO.getProductPage(
       page,
       limit,
       category,
@@ -28,11 +28,11 @@ class ViewsRepository {
   }
 
   async getProduct() {
-    return await this.productManagerDB.getProduct();
+    return await productDAO.getProduct();
   }
 
   async getProductById(productId) {
-    return await this.productManagerDB.getProductById(productId);
+    return await productDAO.getProductById(productId);
   }
 }
 

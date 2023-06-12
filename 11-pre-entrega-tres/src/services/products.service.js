@@ -58,6 +58,37 @@ class ProductService {
       throw new Error("Product does not exist");
     }
   }
+
+
+  async getAvailableStock(productId) {
+
+    try {
+      const product = await productsRepository.getProductById(productId);
+      if (product) {
+        return product.payload.stock;
+      } else {
+        throw new Error(`Product with ID ${productId} not found`);
+      }
+    } catch (error) {
+      throw new Error(`Error retrieving available stock for product with ID ${productId}: ${error.message}`);
+    }
+  }
+
+  async updateStock(productId, newStock) {
+    try {
+      const updatedProduct = await productsRepository.updateStock(productId, newStock);
+      if (!updatedProduct) {
+        throw new Error("Product not found");
+      }
+
+      return updatedProduct;
+    } catch (error) {
+      throw new Error(`Error updating product stock: ${error.message}`);
+    }
+  }
+
 }
+
+
 
 export const productService = new ProductService();

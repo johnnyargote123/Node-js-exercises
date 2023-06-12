@@ -1,5 +1,5 @@
 import {viewsRepository} from "../dao/repositories/views.repository.js";
-
+import UserDTO from "../dao/dtos/session.dto.js"
 
 
 export async function getChat(req, res) {
@@ -62,7 +62,8 @@ export async function getHome(req, res) {
       price: product.price,
     };
   });
-
+  const currentUser = req.session.user;
+  const currentUserDTO = new UserDTO(currentUser);
   res.render("home", {
     products$: productsWithOwnProperties,
     currentPage: page,
@@ -71,7 +72,7 @@ export async function getHome(req, res) {
     hasPrevPage: products.hasPrevPage,
     nextPage: page + 1,
     prevPage: page - 1,
-    user: req.session.user,
+    user: currentUserDTO,
     style: "index.css",
   });
 }
@@ -94,6 +95,18 @@ export async function getRealTimeProducts(req, res) {
     products$: productsWithOwnProperties,
     style: "index.css",
   });
+}
+
+export function getCurrentUser(req, res) {
+
+    const currentUser = req.session.user;
+    console.log(currentUser)
+    if (currentUser) {
+      const currentUserDTO = new UserDTO(currentUser);
+      return res.render("current", { currentUser: currentUserDTO });
+    } 
+
+ 
 }
 
 export async function getProduct(req, res) {

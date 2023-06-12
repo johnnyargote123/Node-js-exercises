@@ -1,31 +1,25 @@
-import CartManager from "../../dao/fileManager/cartManager.js";
-import ProductManagerDB from "../../dao/dbManager/productManager.js";
-import CartManagerDB from "../../dao/dbManager/cartManager.js";
 
-// Crea instancias de los gestores de acceso a datos
-const cartManager = new CartManager();
-const productManagerDB = new ProductManagerDB();
-const cartManagerDB = new CartManagerDB();
 
-// Repositorio para la entidad "Cart"
+import { productDAO, cartsDAO } from "../factory.js";
+
+
  class CartRepository {
   async getAllCarts() {
     try {
-      let consulta = await cartManagerDB.getCarts();
-
+      const consulta = await cartsDAO.getCarts();
       if (consulta.length === 0) {
         throw new Error("There are no carts registered");
       }
 
       return consulta;
     } catch (error) {
-      throw new Error("Internal server error");
+      throw error;
     }
   }
 
   async getCartById(id) {
     try {
-      const consulta = await cartManagerDB.getCartById(id);
+      const consulta = await cartsDAO.getCartById(id);
       if (consulta && consulta.id !== -1) {
         return consulta;
       }
@@ -35,9 +29,10 @@ const cartManagerDB = new CartManagerDB();
     }
   }
 
+
   async createCart() {
     try {
-      let consulta = await cartManagerDB.createCarts();
+      let consulta = await cartsDAO.createCarts();
       return consulta;
     } catch (error) {
       throw new Error("Can not create Cart");
@@ -46,14 +41,14 @@ const cartManagerDB = new CartManagerDB();
 
   async addProductToCart(cartId, productId, quantity) {
     try {
-      const consultaCart = await cartManagerDB.getCartById(cartId);
-      const consultaProduct = await productManagerDB.getProductById(productId);
+      const consultaCart = await cartsDAO.getCartById(cartId);
+      const consultaProduct = await productDAO.getProductById(productId);
 
       if (!consultaCart || !consultaProduct) {
         throw new Error(`Cart (${cartId}) or product (${productId}) not found`);
       }
 
-      const agregarProductoCarrito = await cartManagerDB.addProductToCart(
+      const agregarProductoCarrito = await cartsDAO.addProductToCart(
         cartId,
         productId,
         quantity
@@ -66,7 +61,7 @@ const cartManagerDB = new CartManagerDB();
 
   async removeProductFromCart(cartId, productId) {
     try {
-      const result = await cartManagerDB.removeProductFromCart(cartId, productId);
+      const result = await cartsDAO.removeProductFromCart(cartId, productId);
 
       if (result === null) {
         throw new Error(`An error occurred while removing the product (${productId}) from the cart (${cartId})`);
@@ -80,7 +75,7 @@ const cartManagerDB = new CartManagerDB();
 
   async deleteCartById(cartId) {
     try {
-      const result = await cartManagerDB.deleteCartById(cartId);
+      const result = await cartsDAO.deleteCartById(cartId);
 
       if (!result) {
         throw new Error(`Cart not found (${cartId})`);
@@ -94,7 +89,7 @@ const cartManagerDB = new CartManagerDB();
 
   async updateCart(cartId, products) {
     try {
-      const updatedCart = await cartManagerDB.updateCart(cartId, products);
+      const updatedCart = await cartsDAO.updateCart(cartId, products);
 
       if (!updatedCart) {
         throw new Error(`Cart not found (${cartId})`);
@@ -108,7 +103,7 @@ const cartManagerDB = new CartManagerDB();
 
   async updateProductQuantity(cartId, productId, quantity) {
     try {
-      const updatedProduct = await cartManagerDB.updateProductQuantity(
+      const updatedProduct = await cartsDAO.updateProductQuantity(
         cartId,
         productId,
         quantity
@@ -123,6 +118,8 @@ const cartManagerDB = new CartManagerDB();
       throw new Error("An error occurred while updating the product quantity");
     }
   }
+
+  
 }
 
 export const cartsRepository = new CartRepository()

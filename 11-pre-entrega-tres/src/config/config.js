@@ -1,4 +1,16 @@
 import dotenv from "dotenv";
+import { program } from "commander";
+
+
+program
+    .option(
+        "-per, --persistence <type>", "Tipo de persistencia: MONGO o MEMORY", "MONGO"
+    )
+    .parse();
+  
+
+program.parse()
+const { persistence } = program.opts();
 dotenv.config()
 const config = {
     dbName: process.env.DB_NAME,
@@ -8,7 +20,8 @@ const config = {
     sessionSecret: process.env.SESSION_SECRET,
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackUrl: process.env.CALLBACK_URL
+    callbackUrl: process.env.CALLBACK_URL,
+    persistence:  process.argv[2]?.toUpperCase() || persistence
 }
 
 export default config

@@ -1,14 +1,11 @@
-import ProductManager from "../../dao/fileManager/producManager.js";
-import ProductManagerDB from "../../dao/dbManager/productManager.js";
+import { productDAO } from "../factory.js";
 
-const manager = new ProductManager();
-const managerDB = new ProductManagerDB();
 
  class ProductRepository {
   async getAllProducts(limit, page, category, status, sort) {
     try {
 
-      const products = await managerDB.getProductPage(
+      const products = await productDAO.getProductPage(
         page,
         limit,
         category,
@@ -41,7 +38,7 @@ const managerDB = new ProductManagerDB();
 
    async getProductById(productId) {
     try {
-      const consulta = await managerDB.getProductById(productId);
+      const consulta = await productDAO.getProductById(productId);
       if (consulta) {
         return { status: "success", payload: consulta };
       } else {
@@ -83,12 +80,12 @@ const managerDB = new ProductManagerDB();
         });
       }
 
-      const existingProduct = await managerDB.getProduct();
+      const existingProduct = await productDAO.getProduct();
       if (existingProduct.find((v) => v.code === product.code)) {
         return { status: "Error", error: "value of object repeat" };
       }
 
-      const createdProduct = await managerDB.addProduct(
+      const createdProduct = await productDAO.addProduct(
         product.title,
         product.description,
         product.code,
@@ -111,7 +108,7 @@ const managerDB = new ProductManagerDB();
 
   async updateProduct(productId, product) {
     try {
-      const consulta = await managerDB.getProduct();
+      const consulta = await productDAO.getProduct();
       const productIndex = consulta.findIndex((p) => p._id == productId);
       if (productIndex === -1) {
         return { status: "Error", message: "Product not found" };
@@ -121,7 +118,7 @@ const managerDB = new ProductManagerDB();
         return { status: "Error", message: "Cannot update product ID" };
       }
 
-      await managerDB.updateProductById(
+      await productDAO.updateProductById(
         productId,
         product.title,
         product.description,
@@ -141,17 +138,31 @@ const managerDB = new ProductManagerDB();
 
    async deleteProduct(productId) {
     try {
-      const consulta = await managerDB.getProduct();
+      const consulta = await productDAO.getProduct();
       const productIndex = consulta.findIndex((p) => p._id == productId);
       if (productIndex === -1) {
         return { status: "Error", message: "Product does not exist" };
       }
 
-      await managerDB.deleteProductId(productId);
+      await productDAO.deleteProductId(productId);
 
       return { status: "Success", message: "Product successfully deleted" };
     } catch (error) {
       return { status: "Error", message: "Product does not exist" };
+    }
+  }
+
+  async updateStock(productId, newStock) {
+    try {
+      const updatedProduct = await productDAO.updateStock(productId, newStock);
+
+      if (!updatedProduct) {
+        throw new Error("Product not found");
+      }
+
+      return updatedProduct;
+    } catch (error) {
+      throw new Error(`Error updating product stock: ${error.message}`);
     }
   }
 }

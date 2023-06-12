@@ -1,14 +1,14 @@
 import fs from "fs"
 import socket from "../../socket.js";
-export default class ProductManager  {
+ class Products  {
 
     constructor(){
-        this.path = "../../../files/Products.json"
+        this.path = "./files/Products.json"
         this.products = []
  
     }
 
-    getProduct = async() => {
+    getProductPage = async() => {
         if(fs.existsSync(this.path || !this.products)){
             const data = await fs.promises.readFile(this.path, "utf-8")
             const result = JSON.parse(data)
@@ -152,3 +152,5 @@ export default class ProductManager  {
     }
 
 }
+
+export  const productsMemory = new Products()

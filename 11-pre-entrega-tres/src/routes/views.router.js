@@ -6,13 +6,14 @@ import {
   getCartPersonal,
   getHome,
   getRealTimeProducts,
-  getProduct
+  getProduct,
+  getCurrentUser
 } from "../controllers/views.controller.js";
 import { checkLogged, checkLogin } from "../middlewares/auth.js";
-
+import { authorizeUser } from "../middlewares/auth.js";
 const router = express.Router();
 
-router.get("/chat", checkLogged, getChat);
+router.get("/chat",checkLogin,authorizeUser(["USER"]), getChat);
 
 router.get("/register", checkLogged, getRegister);
 
@@ -22,8 +23,11 @@ router.get("/cart-personal", checkLogin, getCartPersonal);
 
 router.get("/", checkLogin, getHome);
 
+router.get("/current", checkLogin ,getCurrentUser )
+
 router.get("/realtimeproducts", getRealTimeProducts);
 
 router.get("/product/:id", checkLogin, getProduct);
+
 
 export default router;
