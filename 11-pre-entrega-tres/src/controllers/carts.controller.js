@@ -103,7 +103,6 @@ export const purchaseCart = async (req, res) => {
     const availableStock = await productService.getAvailableStock(product._id);
     //console.log(availableStock, 'stock')
     if (availableStock >= quantity) {
-      console.log('holi')
       // Restar el stock del producto y continuar con la compra
       const upStock = await productService.updateStock(product._id, availableStock - quantity);
     } else {

@@ -23,9 +23,9 @@ router.post("/", authorizeUser(["USER"]), createCart);
 router.post("/:cid/product/:pid", authorizeUser(["USER"]), addProductToCart);
 
 
-router.post('/:cid/purchase', authorizeUser(["USER"]), purchaseCart);
+router.post('/:cid/purchase', purchaseCart);
 
-router.delete("/:cid/products/:pid",  authorizeUser(["USER"]) ,removeProductFromCart);
+router.delete("/:cid/products/:pid", removeProductFromCart);
 
 router.delete("/:cid", authorizeUser(["USER"]),  deleteCartById);
 
