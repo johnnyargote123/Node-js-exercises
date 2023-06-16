@@ -18,7 +18,7 @@ buyButton.addEventListener('click', () => {
       // Verifica el estado de la respuesta
       if (response.ok) {
         console.log('Compra exitosa');
-        // Aquí puedes realizar cualquier acción adicional después de la compra exitosa
+        window.location.href = "/";
       } else {
         console.error('Error al realizar la compra');
       }

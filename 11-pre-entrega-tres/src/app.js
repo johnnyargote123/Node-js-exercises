@@ -49,7 +49,6 @@ database.connect();
 
 
 
-
 app.use("/api/sessions", sessionsRouter);
 app.use("/api/products/", productRouter);
 app.use("/api/carts/", cardRouter);
