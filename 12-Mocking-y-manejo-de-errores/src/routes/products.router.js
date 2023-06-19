@@ -8,10 +8,11 @@ import {
 } from "../controllers/products.controller.js";
 import { uploader } from "../utils.js";
 import { authorizeUser } from "../middlewares/auth.js";
+
 const router = Router();
 
-router.get("/",authorizeUser(["ADMIN"]), getAllProducts);
-router.get("/:id",authorizeUser(["ADMIN"]), getProductById);
+router.get("/", getAllProducts);
+router.get("/:id", getProductById);
 router.post("/",authorizeUser(["ADMIN"]), uploader.array("thumbnails", 5), createProduct);
 router.put("/:id",authorizeUser(["ADMIN"]), updateProduct);
 router.delete("/:id",authorizeUser(["ADMIN"]), deleteProduct);

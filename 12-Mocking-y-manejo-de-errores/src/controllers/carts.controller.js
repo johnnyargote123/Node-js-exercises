@@ -1,10 +1,11 @@
 import { cartService } from "../services/carts.service.js";
 import {productService} from "../services/products.service.js";
 import {ticketService} from "../services/ticket.service.js";
+import{mailService} from "../services/mail.service.js"
 export const getAllCarts = async (req, res) => {
   try {
     const carts = await cartService.getAllCarts();
-    res.json(carts);
+    res.json(carts );
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -103,7 +104,6 @@ export const purchaseCart = async (req, res) => {
     const availableStock = await productService.getAvailableStock(product._id);
     //console.log(availableStock, 'stock')
     if (availableStock >= quantity) {
-      console.log('holi')
       // Restar el stock del producto y continuar con la compra
       const upStock = await productService.updateStock(product._id, availableStock - quantity);
     } else {
@@ -116,12 +116,13 @@ export const purchaseCart = async (req, res) => {
 
     // Generar un ticket con los datos de la compra
     const ticket = await ticketService.generateTicket(cartId, req.session.user.email);
-  console.log(ticket, 'ticket')
+    await mailService.createTransportEmail(req.session.user.email)
     if (productsToPurchase.length > 0) {
       // Actualizar el carrito para contener solo los productos que no pudieron comprarse
       const failedProducts = cart.products.filter((cartProduct) => productsToPurchase.includes(cartProduct.product._id));
       cart.products = failedProducts;
       await cart.save();
+
     } else {
       // Vaciar el carrito, ya que todos los productos se pudieron comprar
       cart.products = [];

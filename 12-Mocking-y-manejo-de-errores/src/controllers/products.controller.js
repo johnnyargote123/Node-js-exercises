@@ -1,5 +1,6 @@
 import {productService} from "../services/products.service.js";
-
+import Customerror from "../errors/customError.js";
+import { ErrorNames, ErrorMessages, ErrorCauses } from "../errors/errors.enum.js";
 
 
 
@@ -20,7 +21,11 @@ export async function getAllProducts(req, res) {
     );
     res.json(products);
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    Customerror.generateCustomError({
+      name: ErrorNames.GENERAL_ERROR_NAME,
+      message: ErrorMessages.PRODUCTS_NOR_FOUND_MESSAGE,
+      cause: ErrorCauses.PRODUCT_NOT_FOUND_CUASE
+    })
   }
 }
 

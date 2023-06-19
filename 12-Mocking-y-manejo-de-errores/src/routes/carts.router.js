@@ -14,24 +14,24 @@ import {
 
 const router = Router();
 
-router.get("/", authorizeUser(["USER"]), getAllCarts);
+router.get("/", getAllCarts);
 
-router.get("/:id", authorizeUser(["USER"]), getCartById);
+router.get("/:id", getCartById);
 
 router.post("/", authorizeUser(["USER"]), createCart);
 
 router.post("/:cid/product/:pid", authorizeUser(["USER"]), addProductToCart);
 
 
-router.post('/:cid/purchase', authorizeUser(["USER"]), purchaseCart);
+router.post('/:cid/purchase',authorizeUser(["USER"]), purchaseCart);
 
-router.delete("/:cid/products/:pid",  authorizeUser(["USER"]) ,removeProductFromCart);
+router.delete("/:cid/products/:pid", removeProductFromCart);
 
-router.delete("/:cid", authorizeUser(["USER"]),  deleteCartById);
+router.delete("/:cid",  deleteCartById);
 
-router.put("/:cid", authorizeUser(["USER"]), updateCart);
+router.put("/:cid", updateCart);
 
-router.put("/:cid/products/:pid", authorizeUser(["USER"]),  updateProductQuantity);
+router.put("/:cid/products/:pid",  updateProductQuantity);
 
 
 export default router;

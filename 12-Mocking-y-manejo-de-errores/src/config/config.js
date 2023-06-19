@@ -21,7 +21,11 @@ const config = {
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
     callbackUrl: process.env.CALLBACK_URL,
-    persistence:  process.argv[2]?.toUpperCase() || persistence
+    persistence:  process.argv[2]?.toUpperCase() || persistence,
+    service: process.env.SERVICE,
+    port: process.env.PORT,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
 }
 
 export default config
