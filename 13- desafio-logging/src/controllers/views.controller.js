@@ -100,7 +100,7 @@ export async function getRealTimeProducts(req, res) {
 export function getCurrentUser(req, res) {
 
     const currentUser = req.session.user;
-    console.log(currentUser)
+    req.logger.debug(currentUser)
     if (currentUser) {
       const currentUserDTO = new UserDTO(currentUser);
       return res.render("current", { currentUser: currentUserDTO });

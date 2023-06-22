@@ -8,7 +8,7 @@ export default class Message {
       const createdMessage = await messagesModel.create(message);
       return createdMessage;
     } catch (error) {
-      console.log(error);
+      req.logger.error(error);
     }
   };
 
@@ -17,7 +17,7 @@ export default class Message {
       const messages = await messagesModel.find();
       return messages;
     } catch (error) {
-      console.log(error);
+      req.logger.error(error);
     }
   };
 }

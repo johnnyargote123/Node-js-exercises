@@ -6,7 +6,7 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/products.controller.js";
-import { uploader } from "../utils.js";
+import { uploader } from "../utils/utils.js";
 import { authorizeUser } from "../middlewares/auth.js";
 
 const router = Router();

@@ -90,7 +90,6 @@ export const updateProductQuantity = async (req, res) => {
 
 export const purchaseCart = async (req, res) => {
   const cartId = req.params.cid;
-  console.log(cartId, )
 
     const cart = await cartService.getCartById(cartId);
     const productsToPurchase = [];
@@ -98,33 +97,24 @@ export const purchaseCart = async (req, res) => {
   
   for (const cartProduct of cart.products) {
     const { product, quantity } = cartProduct;
-    //console.log(product)
-     // console.log(product._id)
-     //console.log(quantity , 'cantidad')
     const availableStock = await productService.getAvailableStock(product._id);
-    //console.log(availableStock, 'stock')
     if (availableStock >= quantity) {
-      // Restar el stock del producto y continuar con la compra
       const upStock = await productService.updateStock(product._id, availableStock - quantity);
     } else {
-      // No hay suficiente stock para el producto
       productsToPurchase.push(product._id);
     }
   }
 
 
 
-    // Generar un ticket con los datos de la compra
     const ticket = await ticketService.generateTicket(cartId, req.session.user.email);
     await mailService.createTransportEmail(req.session.user.email)
     if (productsToPurchase.length > 0) {
-      // Actualizar el carrito para contener solo los productos que no pudieron comprarse
       const failedProducts = cart.products.filter((cartProduct) => productsToPurchase.includes(cartProduct.product._id));
       cart.products = failedProducts;
       await cart.save();
 
     } else {
-      // Vaciar el carrito, ya que todos los productos se pudieron comprar
       cart.products = [];
       await cart.save();
     }

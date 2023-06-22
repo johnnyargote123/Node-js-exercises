@@ -78,7 +78,7 @@ import mongoose from 'mongoose';
         await newProduct.save();
         socket.io.emit("add-product", newProduct);
       } else {
-        console.log("No se puede repetir el codigo:", code);
+        req.logger.error("No se puede repetir el codigo:", code);
       }
     } catch (error) {
       console.error(error);

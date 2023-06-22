@@ -5,7 +5,7 @@ class Session {
     try {
       return await userModel.findOne({ email });
     } catch (error) {
-      console.log(error);
+      req.logger.error(error);
       throw new Error("Internal server error");
     }
   }
@@ -14,7 +14,7 @@ class Session {
     try {
       return await userModel.create(user);
     } catch (error) {
-      console.log(error);
+      req.logger.error(error);
       throw new Error("Internal server error");
     }
   }
@@ -23,7 +23,7 @@ class Session {
     try {
       return await userModel.updateOne({ email }, update);
     } catch (error) {
-      console.log(error);
+      req.logger.error(error);
       throw new Error("Internal server error");
     }
   }

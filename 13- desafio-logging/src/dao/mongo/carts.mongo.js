@@ -47,19 +47,19 @@ class carts {
     try {
       const cartIdSave = new mongoose.Types.ObjectId(cartId);
       const cart = await cartModel.findById(cartIdSave);
-      console.log(cart, "aca");
+      req.logger.debug(cart);
       if (!cart) {
-        console.error(`No se encontró el carrito ${cartId}`);
+        req.logger.error(`No se encontró el carrito ${cartId}`);
         return null;
       }
 
       cart.products = [];
       await cart.save();
 
-      console.log(`Se eliminaron todos los productos del carrito ${cartId}`);
+      req.logger.warning(`Se eliminaron todos los productos del carrito ${cartId}`);
       return cart;
     } catch (error) {
-      console.error(error);
+      req.logger.error(error);
       return null;
     }
   };
@@ -67,19 +67,18 @@ class carts {
     try {
       const productIdSave = new mongoose.Types.ObjectId(productId);
       const cartIdSave = new mongoose.Types.ObjectId(cartId);
-      console.log(cartId, "aca añadir Productos ");
       const cart = await cartModel.findById(cartIdSave);
       const product = await productModel.findById(productIdSave);
 
       if (!cart) {
-        console.error(
+        req.logger.error(
           `No se encontró el carrito ${cartId} al que desea agregar productos`
         );
         return null;
       }
 
       if (!product) {
-        console.error(`Producto ${productId} no encontrado`);
+        req.logger.error(`Producto ${productId} no encontrado`);
         return null;
       }
 
@@ -163,7 +162,7 @@ class carts {
       cart.products = updatedProducts;
       await cart.save();
 
-      console.log(`Se actualizó el carrito ${cartId} con los nuevos productos`);
+      req.logger.warning(`Se actualizó el carrito ${cartId} con los nuevos productos`);
       return cart;
     } catch (error) {
       console.error(error);
@@ -176,15 +175,13 @@ class carts {
       const cartObjectId = new mongoose.Types.ObjectId(cartId);
       const productObjectId = new mongoose.Types.ObjectId(productId);
       const cart = await cartModel.findById(cartObjectId);
-      //console.log(cart, "aca mongo");
       if (!cart) {
-        console.error(`No se encontró el carrito ${cartId}`);
+        req.logger.error(`No se encontró el carrito ${cartId}`);
         return null;
       }
       const existingProductIndex = cart.products.findIndex((product) => {
         return product.product._id.toString() === productObjectId.toString();
       });
-      console.log(existingProductIndex, "aca mongo");
       if (existingProductIndex !== -1) {
         cart.products[existingProductIndex].quantity = quantity;
         await cart.save();

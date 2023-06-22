@@ -101,7 +101,6 @@ import { productDAO } from "../factory.js";
         message: `Product created: ${createdProduct}`,
       };
     } catch (error) {
-      console.log(error);
       return { status: "Error", error: "Error creating product" };
     }
   }

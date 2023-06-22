@@ -16,7 +16,7 @@ class SessionService {
     try {
       await sessionRepository.logoutUser(data);
     } catch (error) {
-      console.log(error); // Log the error for debugging purposes
+      req.logger.error(error);
       throw new Error("An error occurred while logging out.");
     }
   }

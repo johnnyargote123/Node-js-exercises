@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
 import userModel from "../dao/mongo/models/user.model.js";
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash, isValidPassword } from "../utils/utils.js";
 import GitHubStrategy from "passport-github2";
 import config from "../config/config.js";
 const { clientID, clientSecret, callbackUrl } = config;
@@ -20,7 +20,7 @@ const initializePassport = () => {
 
           let user = await userModel.findOne({ email: username });
           if (user) {
-            console.log("User already exists");
+            req.logger.iwarning('User already exists')
             return done(null, false);
           }
 

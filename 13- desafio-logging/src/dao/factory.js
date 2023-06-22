@@ -20,4 +20,7 @@ switch (config.persistence) {
         break;
 }
 
-export { productDAO, cartsDAO }
+
+
+
+export { productDAO, cartsDAO}

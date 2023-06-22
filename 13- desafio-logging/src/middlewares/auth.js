@@ -12,13 +12,13 @@ function checkLogin(req, res, next) {
 
   const authorizeUser = (roles) => (req, res, next) => {
     const userRole = req.session.user.rol;
-    console.log(userRole)
+    req.logger.warning(userRole)
    
     if (roles.includes(userRole)) {
 
       next();
     } else {
-      
+      req.logger.error('No tienes permiso para acceder a este recurso')
       res.status(403).json({ error: "No tienes permiso para acceder a este recurso" });
     }
   };
