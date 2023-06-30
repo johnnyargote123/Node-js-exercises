@@ -17,6 +17,8 @@ import passport from "passport";
 import initializePassport from "./auth/passport.js";
 import { errorMiddleware } from "./errors/error.middleware.js";
 import { addLogger } from "./middlewares/logger.js";
+
+
 const app = express();
 app.use(addLogger)
 app.use(errorMiddleware)
