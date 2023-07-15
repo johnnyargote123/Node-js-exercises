@@ -93,7 +93,8 @@ import { productDAO } from "../factory.js";
         JSON.stringify(thumbnails),
         Boolean(product.status),
         Number(product.stock),
-        product.category
+        product.category,
+        product.owner || 'admin'
       );
 
       return {
@@ -135,19 +136,27 @@ import { productDAO } from "../factory.js";
     }
   }
 
-   async deleteProduct(productId) {
+  async deleteProduct(productId, currentUser, currentRol) {
     try {
       const consulta = await productDAO.getProduct();
       const productIndex = consulta.findIndex((p) => p._id == productId);
       if (productIndex === -1) {
-        return { status: "Error", message: "Product does not exist" };
+        return { status: "Error", message: "El producto no existe" };
       }
-
-      await productDAO.deleteProductId(productId);
-
-      return { status: "Success", message: "Product successfully deleted" };
+  
+      if (currentRol === "PREMIUM") {
+        const productCurrentUser = consulta.find((p) => p.owner == currentUser);
+        if (!productCurrentUser) {
+          return { status: "Error", message: "No tienes permisos para eliminar este producto" };
+        }
+        await productDAO.deleteProductId(productCurrentUser._id);
+        return { status: "Success", message: "Producto eliminado exitosamente" };
+      } else {
+        await productDAO.deleteProductId(productId);
+        return { status: "Success", message: "Producto eliminado exitosamente" };
+      }
     } catch (error) {
-      return { status: "Error", message: "Product does not exist" };
+      return { status: "Error", message: "Ocurrió un error al eliminar el producto" };
     }
   }
 

@@ -37,6 +37,10 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    owner: {
+        type: String,
+        required: false
+    }
 })
 productSchema.plugin(mongoosePaginate)
 const productModel = mongoose.model(productCollection, productSchema)

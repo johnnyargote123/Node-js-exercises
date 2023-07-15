@@ -29,8 +29,12 @@ class ProductService {
     }
   }
 
-  async createProduct(product) {
+  async createProduct(product, currentUser, currentRol) {
+
     try {
+      if(product.owner && currentRol == "PREMIUM"){
+          product.owner = currentUser       
+      }
       const createdProduct = await productsRepository.createProduct(product);
       return createdProduct;
     } catch (error) {
@@ -50,9 +54,9 @@ class ProductService {
     }
   }
 
-  async deleteProduct(id) {
+  async deleteProduct(id, currentUser, currentRol) {
     try {
-      const deletedProduct = await productsRepository.deleteProduct(id);
+      const deletedProduct = await productsRepository.deleteProduct(id,currentUser, currentRol);
       return deletedProduct;
     } catch (error) {
       throw new Error("Product does not exist");

@@ -1,6 +1,6 @@
 import {viewsRepository} from "../dao/repositories/views.repository.js";
 import UserDTO from "../dao/dtos/session.dto.js"
-
+import{mailService} from "../services/mail.service.js"
 
 export async function getChat(req, res) {
   const messages = await viewsRepository.getMessages();
@@ -13,6 +13,10 @@ export function getRegister(req, res) {
 
 export function getLogin(req, res) {
   res.render("login");
+}
+
+export function getForgot(req, res) {
+  res.render("forgot-pass");
 }
 
 export async function getCartPersonal(req, res) {
@@ -107,6 +111,17 @@ export function getCurrentUser(req, res) {
     } 
 
  
+}
+
+export function getResetPassword (req, res) {
+  const token  = req.params.token;
+  console.log(token)
+
+  if (mailService.isValidToken(token)) {
+    res.render("reset-password", { token, style: "reset-pass.css" });
+  } else {
+    res.redirect("/forgot-pass")
+  }
 }
 
 export async function getProduct(req, res) {

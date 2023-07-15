@@ -1,4 +1,5 @@
 import { productModel } from "../mongo/models/product.model.js";
+import { sessionMongo } from "../mongo/session.mongo.js";
 import socket from "../../socket.js";
 import mongoose from 'mongoose';
  class Producs {
@@ -49,6 +50,10 @@ import mongoose from 'mongoose';
       console.error(error);
     }
   };
+
+  
+
+
   addProduct = async (
     title,
     description,
@@ -57,13 +62,13 @@ import mongoose from 'mongoose';
     thumbnail,
     status,
     stock,
-    category
+    category,
+    owner
   ) => {
     try {
       const productos = await productModel.find();
       const findCode = productos.find((v) => v.code === code);
-
-      if (!findCode) {
+      if (!findCode && (owner || owner == 'admin')) {
         const newProduct = new productModel({
           title,
           description,
@@ -73,7 +78,11 @@ import mongoose from 'mongoose';
           status,
           stock,
           category,
+          owner
         });
+
+  
+
 
         await newProduct.save();
         socket.io.emit("add-product", newProduct);

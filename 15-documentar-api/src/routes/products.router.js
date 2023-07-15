@@ -6,15 +6,15 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/products.controller.js";
-import { uploader } from "../utils/utils.js";
+import { uploader } from "../utils.js";
 import { authorizeUser } from "../middlewares/auth.js";
 
 const router = Router();
 
 router.get("/", getAllProducts);
 router.get("/:id", getProductById);
-router.post("/",authorizeUser(["ADMIN"]), uploader.array("thumbnails", 5), createProduct);
+router.post("/",authorizeUser(["ADMIN", "PREMIUM"]), uploader.array("thumbnails", 5), createProduct);
 router.put("/:id",authorizeUser(["ADMIN"]), updateProduct);
-router.delete("/:id",authorizeUser(["ADMIN"]), deleteProduct);
+router.delete("/:id",authorizeUser(["ADMIN", "PREMIUM"]), deleteProduct);
 
 export default router;

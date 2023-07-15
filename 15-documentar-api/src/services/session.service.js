@@ -1,5 +1,6 @@
 import { sessionRepository } from "../dao/repositories/session.repository.js";
 import UserDTO from "../dao/dtos/session.dto.js";
+import { mailService } from "./mail.service.js";
 class SessionService {
   async loginUser(email, password) {
     try {
@@ -10,7 +11,14 @@ class SessionService {
     }
   }
 
-
+  async forgotPasswordUser(email) {
+    try {
+      const userForgot = await sessionRepository.forgotPasswordUser(email)
+      return userForgot
+    } catch (error) {
+      throw new Error("Email not registered");
+    }
+  }
 
   async  logoutUser(data) {
     try {
@@ -35,6 +43,20 @@ class SessionService {
       throw new Error("Internal server error");
     }
   }
+
+async resetPassUser (email,password,token){
+  try {
+    const result = await sessionRepository.resetPassUser(
+      email,
+      password,
+      token
+    );
+    mailService.deleteToken(token)
+    return result;
+  } catch (error) {
+    throw new Error("Internal server error");
+  }
+}
 
   githubAuth() {
   }

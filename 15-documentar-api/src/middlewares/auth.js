@@ -22,6 +22,8 @@ function checkLogin(req, res, next) {
       res.status(403).json({ error: "No tienes permiso para acceder a este recurso" });
     }
   };
+
+  
   
   export { checkLogged, checkLogin, authorizeUser };
   

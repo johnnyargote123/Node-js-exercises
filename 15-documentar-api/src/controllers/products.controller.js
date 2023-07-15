@@ -53,8 +53,10 @@ export async function getProductById(req, res) {
 
 export async function createProduct(req, res) {
   const product = req.body;
+  const currentUser = req.session.user.email
+  const currentRol = req.session.user.rol
   try {
-    const createdProduct = await productService.createProduct(product)
+    const createdProduct = await productService.createProduct(product,  currentUser, currentRol )
     req.logger.debug('Product created successfully')
     req.logger.warning('No warning message')
     
@@ -81,8 +83,10 @@ export async function updateProduct(req, res) {
 
 export async function deleteProduct(req, res) {
   const { id } = req.params;
+  const currentUser = req.session.user.email
+  const currentRol = req.session.user.rol
   try {
-    const deletedProduct = await productService.deleteProduct(id)
+    const deletedProduct = await productService.deleteProduct(id,currentUser, currentRol)
     req.logger.debug('Product deleted successfully')
     req.logger.warning('No warning message')
     res.json(deletedProduct)

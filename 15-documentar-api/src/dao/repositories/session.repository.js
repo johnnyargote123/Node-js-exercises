@@ -3,6 +3,7 @@ import { sessionMongo } from "../mongo/session.mongo.js";
 class SessionRepository {
 
 
+
   async loginUser(email, password) {
     try {
       const user = await sessionMongo.findOneByEmail(email);
@@ -22,6 +23,24 @@ class SessionRepository {
       };
       this.currentUser = result
       return result
+    } catch (error) {
+      console.log(error);
+      throw new Error("Internal server error");
+    }
+  }
+
+  async resetPassUser (email,password,token){
+    const user = await sessionMongo.findOneByEmail(email);
+    try {
+      console.log(password,user.password)
+      if (password == user.password) {
+        throw new Error("You can not change password with the last password");
+      }
+      if (password !== user.password) {
+        await sessionMongo.updateUserByEmail(email, { $set: { password: password } });
+        return user.password        
+      }
+
     } catch (error) {
       console.log(error);
       throw new Error("Internal server error");
@@ -56,6 +75,22 @@ class SessionRepository {
       };
       await sessionMongo.createUser(user);
       return { message: "User registered" };
+    } catch (error) {
+      console.log(error);
+      throw new Error("Internal server error");
+    }
+  }
+
+
+
+  async forgotPasswordUser(email) {
+    try {
+      const user = await sessionMongo.findOneByEmail(email);
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+      return { message: "User find" };
     } catch (error) {
       console.log(error);
       throw new Error("Internal server error");

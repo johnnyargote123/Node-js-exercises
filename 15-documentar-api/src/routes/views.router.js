@@ -7,7 +7,9 @@ import {
   getHome,
   getRealTimeProducts,
   getProduct,
-  getCurrentUser
+  getCurrentUser,
+  getForgot,
+  getResetPassword
 } from "../controllers/views.controller.js";
 import { checkLogged, checkLogin } from "../middlewares/auth.js";
 import { authorizeUser } from "../middlewares/auth.js";
@@ -18,6 +20,10 @@ router.get("/chat",checkLogin,authorizeUser(["USER"]), getChat);
 router.get("/register", checkLogged, getRegister);
 
 router.get("/login", checkLogged, getLogin);
+
+router.get("/forgot-pass", checkLogged, getForgot);
+
+router.get("/reset-password/:token", getResetPassword);
 
 router.get("/cart-personal", checkLogin, getCartPersonal);
 
