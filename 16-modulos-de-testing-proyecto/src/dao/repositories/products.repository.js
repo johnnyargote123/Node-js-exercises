@@ -81,7 +81,7 @@ import { productDAO } from "../factory.js";
       }
 
       const existingProduct = await productDAO.getProduct();
-      if (existingProduct.find((v) => v.code === product.code)) {
+      if ( existingProduct.find((v) => v.code === product.code)) {
         return { status: "Error", error: "value of object repeat" };
       }
 
@@ -97,10 +97,26 @@ import { productDAO } from "../factory.js";
         product.owner || 'admin'
       );
 
-      return {
-        status: "Success",
-        message: `Product created: ${createdProduct}`,
-      };
+
+
+        const formattedProduct = {
+          title: product.title,
+          description: product.description,
+          code: product.code,
+          price: Number(product.price),
+          thumbnails: thumbnails,
+          status: Boolean(product.status),
+          stock: Number(product.stock),
+          category: product.category,
+          owner: product.owner || 'admin'
+        };
+    
+        return {
+          status: "Success",
+          message: "Product created",
+          payload: formattedProduct
+        };
+      
     } catch (error) {
       return { status: "Error", error: "Error creating product" };
     }
@@ -130,7 +146,9 @@ import { productDAO } from "../factory.js";
         product.category
       );
 
-      return { status: "OK", message: "Product successfully updated" };
+      const updatedProduct = await productDAO.getProductById(productId);
+
+      return { status: "OK", message: "Product successfully updated", product: updatedProduct };
     } catch (error) {
       return { status: "Error", error: "Incomplete values" };
     }
@@ -149,11 +167,13 @@ import { productDAO } from "../factory.js";
         if (!productCurrentUser) {
           return { status: "Error", message: "No tienes permisos para eliminar este producto" };
         }
-        await productDAO.deleteProductId(productCurrentUser._id);
-        return { status: "Success", message: "Producto eliminado exitosamente" };
+        const deletedCuProduct =  await productDAO.deleteProductId(productCurrentUser._id);
+        console.log(deletedCuProduct, 'deletedCuProduct')
+        return { status: "Success", message: "Producto eliminado exitosamente", payload: deletedCuProduct };
       } else {
-        await productDAO.deleteProductId(productId);
-        return { status: "Success", message: "Producto eliminado exitosamente" };
+        const deletedProduct = await productDAO.deleteProductId(productId);
+        console.log(deletedProduct, 'deletedProduct')
+        return { status: "Success", message: "Producto eliminado exitosamente", payload: deletedProduct  };
       }
     } catch (error) {
       return { status: "Error", message: "Ocurrió un error al eliminar el producto" };

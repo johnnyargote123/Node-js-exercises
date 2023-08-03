@@ -3,6 +3,8 @@ function updateUserRoleMiddleware (req, res, next) {
     if (email !== 'adminCoder@coder.com') {
       req.body.rol = 'USER';
     }
+
+    
     next();
   };
   

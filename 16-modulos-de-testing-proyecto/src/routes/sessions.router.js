@@ -6,7 +6,8 @@ import {
   githubAuth,
   githubCallback,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  deleteUserByName
 } from "../controllers/sessions.controller.js";
 import updateUserRoleMiddleware from "../middlewares/rol.js";
 import passport from "passport";
@@ -31,5 +32,7 @@ router.get(
   passport.authenticate("github", { failureRedirect: "/login" }),
   githubCallback
 );
+
+router.delete("/users/:email", deleteUserByName)
 
 export default router;

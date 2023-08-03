@@ -30,8 +30,9 @@ class ProductService {
   }
 
   async createProduct(product, currentUser, currentRol) {
-
+    
     try {
+      console.log(currentRol,'rol producto')
       if(product.owner && currentRol == "PREMIUM"){
           product.owner = currentUser       
       }

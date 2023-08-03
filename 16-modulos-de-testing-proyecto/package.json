@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon ./src/app.js"
+    "start:dev": "nodemon ./src/app.js",
+    "test:integration": "mocha test/integration/*.test.js --timeout 10000"
   },
   "keywords": [],
   "author": "",
@@ -41,5 +42,10 @@
     "uuid": "^9.0.0",
     "winston": "^3.9.0"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
+  }
 }

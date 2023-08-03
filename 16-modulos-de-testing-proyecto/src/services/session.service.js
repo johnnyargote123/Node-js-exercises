@@ -2,14 +2,25 @@ import { sessionRepository } from "../dao/repositories/session.repository.js";
 import UserDTO from "../dao/dtos/session.dto.js";
 import { mailService } from "./mail.service.js";
 class SessionService {
-  async loginUser(email, password) {
+  async loginUser(email, password, rol) {
     try {
-      const user = await sessionRepository.loginUser(email, password);
+      const user = await sessionRepository.loginUser(email, password, rol);
       return user;
     } catch (error) {
       throw new Error("There are no products registered");
     }
   }
+
+  async deleteUserByName(email) {
+    try {
+      const result = await sessionRepository.deleteUserByName(email);
+      return result
+    } catch (error) {
+      console.log(error);
+      throw new Error("Internal server error");
+    }
+  }
+
 
   async forgotPasswordUser(email) {
     try {
@@ -29,14 +40,15 @@ class SessionService {
     }
   }
 
-  async registerUser(first_name, last_name, email, age, password) {
+  async registerUser(first_name, last_name, email, age, password, rol) {
     try {
       const result = await sessionRepository.registerUser(
         first_name,
         last_name,
         email,
         age,
-        password
+        password,
+        rol
       );
       return result;
     } catch (error) {
@@ -64,6 +76,10 @@ async resetPassUser (email,password,token){
   githubCallback(req) {
     return sessionRepository.githubCallback(req);
   }
+
+  
+
+
 }
 
 export const sessionService = new SessionService();
