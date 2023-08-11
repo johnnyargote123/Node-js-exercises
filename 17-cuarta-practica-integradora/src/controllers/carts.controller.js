@@ -25,7 +25,8 @@ export const getCartById = async (req, res) => {
 export const createCart = async (req, res) => {
   try {
     const cart = await cartService.createCart();
-    res.json(cart);
+    console.log(cart)
+    res.status(200).json({status:"success",  payload: cart});
   } catch (error) {
     res.status(500).json({ error: "Can not create Cart" });
   }

@@ -22,6 +22,7 @@ class carts {
       });
 
       await cart.save();
+      return cart
     } catch (error) {
       console.error(error);
     }

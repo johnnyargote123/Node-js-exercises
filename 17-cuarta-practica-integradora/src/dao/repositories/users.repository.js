@@ -2,17 +2,110 @@ import { sessionMongo } from "../mongo/session.mongo.js";
 
 export class UserRepository {
   async updateUserRole(uid, newRole) {
-    const user = await sessionMongo.findOneByEmail(uid);
+    try {
+      const user = await sessionMongo.findOneByEmail(uid);
+  
+      if (!user) {
+        throw new Error("User not found");
+      }
+      if(newRole === 'PREMIUM'){
+        const requiredDocuments = ["Identificacion", "Comprobante de domicilio", "Comprobante de estado de cuenta"];
+  
+        const hasAllRequiredDocuments = requiredDocuments.every(docName =>
+          user.documents.some(doc => doc.name.includes(docName))
+        );
+        if (!hasAllRequiredDocuments) {
+          throw new Error("User has not uploaded all required documents");
+        }
+          
+      user.rol = newRole;
+      await sessionMongo.updateUserByEmail(uid, { rol: user.rol });
+  
+      return user.rol;
+      }
+      if(newRole === 'USER'){
+  
+        user.rol = newRole;
+        await sessionMongo.updateUserByEmail(uid, { rol: user.rol });
+    
+        return user.rol;
+      }
 
-    if (!user) {
-      throw new Error("User not found");
+    } catch (error) {
+      throw new Error(` ${error} : Identificacion , Comprobante de domicilio, Comprobante de estado de cuenta`);
     }
-
-    user.rol = newRole;
-    await sessionMongo.updateUserByEmail(uid, { rol: user.rol });
-
-    return user.rol;
   }
+
+  async updateUserDocumentStatus(uid, uploadedDocuments) {
+    try {
+
+      const user = await sessionMongo.findOneByEmail(uid);
+  
+      const transformedDocuments = uploadedDocuments.document.map((document, index) => {
+        return {
+          id: index + 1,
+          name: document.originalname,
+          reference: document.filename,
+          fieldname: document.fieldname,
+        };
+      });
+  
+      const transformedProfiles = uploadedDocuments.profile.map((profile, index) => {
+        return {
+          name: profile.originalname,
+          reference: profile.filename,
+          fieldname: profile.fieldname,
+        };
+      });
+  
+      const updatedDocuments = [];
+      const updatedProfiles = [];
+  
+      for (const doc of transformedDocuments) {
+        const existingDocument = user.documents.find(existingDoc => existingDoc.name === doc.name);
+        if (!existingDocument) {
+          const updatedDocument = {
+            name: doc.name,
+            reference: `http://localhost:8080/${doc.fieldname}/${doc.reference}`,
+          };
+  
+          await sessionMongo.updateUserByEmail(uid, {
+            $push: { documents: updatedDocument },
+          });
+  
+          updatedDocuments.push(updatedDocument);
+        }
+      }
+  
+      for (const profile of transformedProfiles) {
+        const existingProfile = user.documents.find(existingProf => existingProf.name === profile.name);
+        if (!existingProfile) {
+          const updatedProfile = {
+            name: profile.name,
+            reference: `http://localhost:8080/${profile.fieldname}/${profile.reference}`,
+          };
+  
+          await sessionMongo.updateUserByEmail(uid, {
+            $push: { documents: updatedProfile },
+          });
+  
+          updatedProfiles.push(updatedProfile);
+        }
+      }
+  
+      return {
+        updatedDocuments,
+        updatedProfiles,
+      };
+    } catch (error) {
+      console.error("Error updating documents:", error);
+      return {
+        updatedDocuments: [],
+        updatedProfiles: [],
+      };
+    }
+  }
+  
 }
 
-export const userRepository = new UserRepository()
+export const userRepository = new UserRepository();
