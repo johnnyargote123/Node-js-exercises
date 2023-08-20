@@ -397,3 +397,14 @@
 {"level":"error","message":"Error occurred during login"}
 {"level":"error","message":"Error occurred during login"}
 {"level":"error","message":"No tienes permiso para acceder a este recurso"}
+{"level":"error","message":"No tienes permiso para acceder a este recurso"}
+{"level":"error","message":"Error occurred during user registration: TypeError: Cannot read properties of undefined (reading 'toUpperCase')"}
+{"level":"error","message":"Error occurred during user registration: TypeError: Cannot read properties of undefined (reading 'toUpperCase')"}
+{"level":"error","message":"Error occurred during user registration: TypeError: Cannot read properties of undefined (reading 'toUpperCase')"}
+{"level":"error","message":"Error occurred during user registration: TypeError: Assignment to constant variable."}
+{"level":"error","message":"Error occurred during user registration: ReferenceError: rol is not defined"}
+{"level":"error","message":"Error occurred during user registration: ReferenceError: rol is not defined"}
+{"level":"error","message":"Error occurred during user registration: ReferenceError: rol is not defined"}
+{"level":"error","message":"Error occurred during user registration: ReferenceError: rol is not defined"}
+{"level":"error","message":"Error occurred during user registration: ReferenceError: rol is not defined"}
+{"level":"error","message":"Error occurred during user registration: Error: Internal server error"}
